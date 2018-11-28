@@ -1,5 +1,7 @@
 #include "general_tree.hpp"
 #include <vector>
+#include <regex>
+#include <sstream>
 
 
 int main(int argc, char* argv[]) {
@@ -21,7 +23,32 @@ int main(int argc, char* argv[]) {
     tree.preorder();
     std::cout << "Count: " << tree.count() << std::endl;
     std::cout << "Height: " << tree.height() << std::endl;
+    return 0;
   }
+
+  const std::string input {argv[1]};
+  const std::regex filter {"[^0-9 ]"};
+
+  std::stringstream result;
+  std::regex_replace(std::ostream_iterator<char>(result), input.begin(), input.end(), filter, "");
+  const std::vector<std::string> results {std::istream_iterator<std::string>{result}, std::istream_iterator<std::string>()};
+
+  if(results.size() < 2 || (results.size() % 2) != 0) {
+    std::cerr << "Invalid edge list" << std::endl;
+    return 3;
+  }
+
+  general_tree::Tree<int> tree;
+
+  for(auto it = results.begin(); it != results.end(); it++) {
+    const int a = std::stoi(*it);
+    const int b = std::stoi(*(++it));
+    tree.addEdge(a, b);
+  }
+
+  tree.preorder();
+  std::cout << "Count: " << tree.count() << std::endl;
+  std::cout << "Height: " << tree.height() << std::endl;
 
   return 0;
 }
