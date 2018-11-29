@@ -4,29 +4,7 @@
 #include <sstream>
 
 
-int main(int argc, char* argv[]) {
-  if(argc < 2) {
-    std::cout << "Usage: algo05 \"[(<from>,<to>) [...]]\"" << std::endl;
-    return 2;
-  }
-
-  if(std::string{argv[1]} == std::string{"test"}) {
-    general_tree::Tree<int> tree;
-    tree.addEdge(7, 5);
-    tree.addEdge(1, 3);
-    tree.addEdge(5, 8);
-    tree.addEdge(5, 1);
-    tree.addEdge(1, 6);
-    tree.addEdge(1, 4);
-    tree.addEdge(7, 9);
-    tree.addEdge(7, 2);
-    tree.preorder();
-    std::cout << "Count: " << tree.count() << std::endl;
-    std::cout << "Height: " << tree.height() << std::endl;
-    return 0;
-  }
-
-  const std::string input {argv[1]};
+int process(const std::string& input) {
   const std::regex filter {"[^0-9 ]"};
 
   std::stringstream result;
@@ -49,6 +27,40 @@ int main(int argc, char* argv[]) {
   tree.preorder();
   std::cout << "Count: " << tree.count() << std::endl;
   std::cout << "Height: " << tree.height() << std::endl;
-
   return 0;
+}
+
+int main(int argc, char* argv[]) {
+  if(argc < 2) {
+    std::cout << "Usage: algo05 \"[(<from>,<to>) [...]]\"" << std::endl;
+    return 2;
+  }
+
+  if(std::string{argv[1]} == std::string{"custom"}) {
+    general_tree::Tree<int> tree;
+    tree.addEdge(7, 5);
+    tree.addEdge(1, 3);
+    tree.addEdge(5, 8);
+    tree.addEdge(5, 1);
+    tree.addEdge(1, 6);
+    tree.addEdge(1, 4);
+    tree.addEdge(7, 9);
+    tree.addEdge(7, 2);
+    tree.preorder();
+    std::cout << "Count: " << tree.count() << std::endl;
+    std::cout << "Height: " << tree.height() << std::endl;
+    return 0;
+  }
+
+  if(std::string{argv[1]} == std::string{"test"}) {
+    std::vector<std::string> cases {
+      #include "./test_cases.raw"
+    };
+    for(const auto& test : cases) {
+      process(test);
+    }
+    return 0;
+  }
+
+  return process(std::string{argv[1]});
 }
